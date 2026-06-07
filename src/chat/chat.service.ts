@@ -49,4 +49,17 @@ export class ChatService {
     duration: data.duration,
   });
 }
+
+
+async markMessagesSeen(chatId: string, userId: string) {
+  return this.messageModel.updateMany(
+    {
+      chatId,
+      senderId: { $ne: userId },
+    },
+    {
+      status: 'seen',
+    },
+  );
+}
 }

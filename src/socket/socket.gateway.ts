@@ -163,4 +163,57 @@ handleIceCandidate(
 });
     this.server.to(data.to).emit('callEnded');
   }
+
+  @SubscribeMessage('rejectCall')
+async handleRejectCall(@MessageBody() data: any) {
+  await this.chatService.sendMessage({
+    chatId: data.chatId,
+    senderId: data.userId,
+    type: 'audio-call-rejected',
+  });
+
+  this.server.to(data.to).emit('callRejected', data);
+  this.server.to(data.chatId).emit('newMessage', {
+    chatId: data.chatId,
+    senderId: data.userId,
+    type: 'audio-call-rejected',
+  });
+}
+
+@SubscribeMessage('missedCall')
+async handleMissedCall(@MessageBody() data: any) {
+  await this.chatService.sendMessage({
+    chatId: data.chatId,
+    senderId: data.callerId,
+    type: 'audio-call-missed',
+  });
+
+  this.server.to(data.chatId).emit('newMessage', {
+    chatId: data.chatId,
+    senderId: data.callerId,
+    type: 'audio-call-missed',
+  });
+}
+
+@SubscribeMessage('typing')
+handleTyping(@MessageBody() data: any) {
+  this.server.to(data.chatId).emit('userTyping', data);
+}
+
+@SubscribeMessage('stopTyping')
+handleStopTyping(@MessageBody() data: any) {
+  this.server.to(data.chatId).emit('userStopTyping', data);
+}
+
+@SubscribeMessage('messageSeen')
+async handleMessageSeen(@MessageBody() data: any) {
+  await this.chatService.markMessagesSeen(data.chatId, data.userId);
+ console.log('MESSAGE SEEN EVENT');
+console.log(data);
+  this.server.to(data.chatId).emit('messagesSeen', {
+    chatId: data.chatId,
+    userId: data.userId,
+  });
+  console.log('EMITTING messagesSeen');
+}
 }

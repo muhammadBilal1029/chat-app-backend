@@ -16,8 +16,13 @@ export class Message {
   fileUrl?: string;
 
   @Prop({ default: 'text' })
-  type: 'text' | 'image' | 'audio' | 'video' | 'file' | 'audio-call-start' | 'audio-call-end';
+  type: 'text' | 'image' | 'audio' | 'video' | 'file' | 'audio-call-start' | 'audio-call-end' |'audio-call-rejected' | 'audio-call-missed' |
+'video-call-start' | 'video-call-end' | 'video-call-rejected' | 'video-call-missed' ;
   
+
+  @Prop({ default: 'sent' })
+status: 'sent' | 'delivered' | 'seen';
+
   @Prop()
   duration?: number;
 }
