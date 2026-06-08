@@ -120,7 +120,10 @@ export class SocketGateway {
  await this.chatService.createSystemMessage({
   chatId: data.chatId,
   senderId: data.callerId,
-  type: 'audio-call-start',
+   type:
+    data.callType === 'video'
+      ? 'video-call-start'
+      : 'audio-call-start',
 });
   this.server
     .to(data.receiverSocketId)
@@ -158,7 +161,10 @@ handleIceCandidate(
     await this.chatService.createSystemMessage({
   chatId: data.chatId,
   senderId: data.userId,
-  type: 'audio-call-end',
+   type:
+    data.callType === 'video'
+      ? 'video-call-end'
+      : 'audio-call-end',
   duration: data.duration,
 });
     this.server.to(data.to).emit('callEnded');
@@ -169,14 +175,20 @@ async handleRejectCall(@MessageBody() data: any) {
   await this.chatService.sendMessage({
     chatId: data.chatId,
     senderId: data.userId,
-    type: 'audio-call-rejected',
+     type:
+      data.callType === 'video'
+        ? 'video-call-rejected'
+        : 'audio-call-rejected',
   });
 
   this.server.to(data.to).emit('callRejected', data);
   this.server.to(data.chatId).emit('newMessage', {
     chatId: data.chatId,
     senderId: data.userId,
-    type: 'audio-call-rejected',
+     type:
+      data.callType === 'video'
+        ? 'video-call-rejected'
+        : 'audio-call-rejected',
   });
 }
 
@@ -185,14 +197,26 @@ async handleMissedCall(@MessageBody() data: any) {
   await this.chatService.sendMessage({
     chatId: data.chatId,
     senderId: data.callerId,
-    type: 'audio-call-missed',
+    type:
+  data.callType === 'video'
+    ? 'video-call-missed'
+    : 'audio-call-missed',
   });
 
   this.server.to(data.chatId).emit('newMessage', {
     chatId: data.chatId,
     senderId: data.callerId,
-    type: 'audio-call-missed',
+    type:
+  data.callType === 'video'
+    ? 'video-call-missed'
+    : 'audio-call-missed',
   });
+   // NEW
+  this.server
+    .to(data.callerSocketId)
+    .emit('callMissed', {
+      callType: data.callType,
+    });
 }
 
 @SubscribeMessage('typing')
