@@ -15,6 +15,7 @@ export class ContactController {
 
   @Get()
   async getContacts(@Request() req) {
+    console.log("REQ USER:", req.user);
     const userId = req.user.userId;
     return this.contactService.getContacts(userId);
   }

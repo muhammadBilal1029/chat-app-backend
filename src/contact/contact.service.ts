@@ -39,10 +39,22 @@ export class ContactService {
     const currentUser = await this.userModel.findById(userId);
 
     // Add contact
-    await this.contactModel.create({
-      userId,
-      contactId: userToAdd._id,
-    });
+   await this.contactModel.create({
+  userId,
+  contactId: userToAdd._id,
+});
+
+const reverseContact = await this.contactModel.findOne({
+  userId: userToAdd._id,
+  contactId: userId,
+});
+
+if (!reverseContact) {
+  await this.contactModel.create({
+    userId: userToAdd._id,
+    contactId: userId,
+  });
+}
 
     // Send email notification to the added user
     await this.emailService.sendContactNotificationEmail(
@@ -55,18 +67,19 @@ export class ContactService {
   }
 
   async getContacts(userId: string) {
-    const contacts = await this.contactModel
-      .find({ userId })
-      .populate('contactId')
-      .exec();
+     console.log("JWT USER:", userId);
 
-    return contacts.map((contact) => ({
-      _id: (contact.contactId as any)._id,
-      name: (contact.contactId as any).name,
-      email: (contact.contactId as any).email,
-      avatar: (contact.contactId as any).avatar,
-      isOnline: (contact.contactId as any).isOnline,
-      socketId: (contact.contactId as any).socketId,
-    }));
+  const allContacts = await this.contactModel.find();
+
+  console.log("ALL CONTACTS:", allContacts);
+
+  const contacts = await this.contactModel
+    .find({ userId })
+    .populate("contactId")
+    .exec();
+
+  console.log("FILTERED:", contacts);
+
+  return contacts;
   }
 }
