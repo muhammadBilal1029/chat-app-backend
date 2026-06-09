@@ -17,6 +17,7 @@ export class EmailService {
   private transporter;
 
   async sendWelcomeEmail(email: string, name: string, otp: string) {
+    console.log('Sending welcome email to:', email);
     const mailOptions = {
       from: this.configService.get<string>('GMAIL_USER'),
       to: email,
@@ -97,6 +98,7 @@ export class EmailService {
   }
 
   async sendContactNotificationEmail(email: string, addedByName: string, addedByEmail: string) {
+    console.log('Sending contact notification email to:', email);
     const loginUrl = `${this.configService.get<string>('FRONTEND_URL')}/login`;
 
     const mailOptions = {
