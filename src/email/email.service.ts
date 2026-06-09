@@ -95,6 +95,7 @@ export class EmailService {
     };
 
     await this.transporter.sendMail(mailOptions);
+    console.log('Welcome email sent successfully');
   }
 
   async sendContactNotificationEmail(email: string, addedByName: string, addedByEmail: string) {
