@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { SocketModule } from './socket/socket.module';
 import { UploadModule } from './upload/upload.module';
+import { ContactModule } from './contact/contact.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -17,6 +18,7 @@ import { AppService } from './app.service';
     ChatModule,
     SocketModule,
     UploadModule,
+    ContactModule,
   ],
   controllers:[AppController],
   providers:[AppService],
