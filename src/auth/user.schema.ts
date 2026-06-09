@@ -22,6 +22,15 @@ export class User {
 
   @Prop()
   socketId?: string;
+
+  @Prop({ default: false })
+  isEmailVerified: boolean;
+
+  @Prop()
+  emailVerificationToken?: string;
+
+  @Prop()
+  emailVerificationTokenExpires?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
