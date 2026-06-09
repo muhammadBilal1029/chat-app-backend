@@ -4,6 +4,7 @@ import { ContactController } from './contact.controller';
 import { ContactService } from './contact.service';
 import { ContactSchema } from './contact.schema';
 import { UserSchema } from '../auth/user.schema';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { UserSchema } from '../auth/user.schema';
       { name: 'Contact', schema: ContactSchema },
       { name: 'User', schema: UserSchema },
     ]),
+    AuthModule,
   ],
   controllers: [ContactController],
   providers: [ContactService],

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UploadController } from './upload.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from '../auth/auth.module';
+
 @Module({
-  imports: [ConfigModule, JwtModule.register({})],
+  imports: [ConfigModule, AuthModule],
   controllers: [UploadController],
 })
 export class UploadModule {}
