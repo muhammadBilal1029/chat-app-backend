@@ -117,7 +117,7 @@ export class SocketGateway {
 ) {
     console.log('CALL USER EVENT');
   console.log(data);
- await this.chatService.createSystemMessage({
+ const message = await this.chatService.createSystemMessage({
   chatId: data.chatId,
   senderId: data.callerId,
    type:
@@ -131,6 +131,7 @@ export class SocketGateway {
       ...data,
       callerSocketId: client.id,
     });
+  this.server.to(data.chatId).emit('newMessage', message);
 }
 
   @SubscribeMessage('answerCall')
