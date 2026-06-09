@@ -158,7 +158,7 @@ handleIceCandidate(
 
   @SubscribeMessage('endCall')
   async handleEndCall(@MessageBody() data: any) {
-    await this.chatService.createSystemMessage({
+    const message = await this.chatService.createSystemMessage({
   chatId: data.chatId,
   senderId: data.userId,
    type:
@@ -168,6 +168,7 @@ handleIceCandidate(
   duration: data.duration,
 });
     this.server.to(data.to).emit('callEnded');
+    this.server.to(data.chatId).emit('newMessage', message);
   }
 
   @SubscribeMessage('rejectCall')
