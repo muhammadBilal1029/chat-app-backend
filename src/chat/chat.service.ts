@@ -12,16 +12,18 @@ export class ChatService {
   ) {}
 
   async createOrGetChat(user1: string, user2: string) {
+     const u1 = new Types.ObjectId(user1);
+  const u2 = new Types.ObjectId(user2);
     let chat = await this.chatModel.findOne({
-      participants: { $all: [user1, user2] },
+      participants: { $all: [u1, u2] },
     });
 
     if (!chat) {
       chat = await this.chatModel.create({
-        participants: [user1, user2],
+        participants: [u1, u2],
       });
     }
-
+    console.log("chat",chat)
     return chat;
   }
 

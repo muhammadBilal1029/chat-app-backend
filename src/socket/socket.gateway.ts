@@ -71,6 +71,7 @@ export class SocketGateway {
     'Users in room:',
     room ? Array.from(room) : [],
   );
+  return { success: true };
     
   }
 
@@ -84,6 +85,7 @@ export class SocketGateway {
       'Broadcasting to room:',
       data.chatId,
     );
+    console.log("message",message);
 
     this.server.to(data.chatId).emit('newMessage', message);
   }
@@ -204,7 +206,7 @@ async handleMissedCall(@MessageBody() data: any) {
     ? 'video-call-missed'
     : 'audio-call-missed',
   });
-
+  
   this.server.to(data.chatId).emit('newMessage', {
     chatId: data.chatId,
     senderId: data.callerId,
@@ -223,7 +225,7 @@ async handleMissedCall(@MessageBody() data: any) {
 
 @SubscribeMessage('typing')
 handleTyping(@MessageBody() data: any) {
-  this.server.to(data.chatId).emit('userTyping', data);
+  this.server.to(data.chatId).emit('userTyping', { isTyping: true });
 }
 
 @SubscribeMessage('stopTyping')
