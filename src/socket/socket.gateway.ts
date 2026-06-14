@@ -14,7 +14,7 @@ import { Model } from 'mongoose';
 
 @WebSocketGateway({
   cors: {
-    origin: "http://localhost:3001",
+    origin: ["http://localhost:3001", "https://www.chat-app-1029.work.gd"],
     credentials: true,
   },
   transports: ["websocket"],
